@@ -155,3 +155,8 @@ select {
     text-decoration: line-through;
     font-style: italic;
 }
+
+@media (max-width: 400px) {
+    .todoContainer {
+        max-width: 300px;
+}}
