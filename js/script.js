@@ -5,7 +5,10 @@ const todoList = document.querySelector('#todoList');
 const editForm = document.querySelector('#editForm');
 const editInput = document.querySelector('#editInput');
 const cancelEditBtn = document.querySelector('#cancelEditBtn');
-
+const searchInput = document.querySelector('#searchInput');
+const eraseBtn = document.querySelector('#eraseButton');
+const filterBtn = document.querySelector('#filterSelect');
+let oldInputValue;
 // FUNÇÕES
 // adicionar todoList
 const saveTodo = (text) => {
@@ -41,6 +44,28 @@ const toggleForms = () => {
   todoForm.classList.toggle('hide');
   todoList.classList.toggle('hide');
 };
+// editar o texto de edição
+const updateTodo = (text) => {
+  const todos = document.querySelectorAll('.todo');
+  todos.forEach((todo) => {
+    let todoTitle = todo.querySelector('h3');
+    if (todoTitle.innerText === oldInputValue) {
+      todoTitle.innerText = text;
+    }
+  });
+};
+
+const getSearcheTodos = (search) => {
+  const todos = document.querySelectorAll('.todo');
+  todos.forEach((todo) => {
+    let todoTitle = todo.querySelector('h3').innerText.toLowerCase();
+    todo.style.display = 'flex';
+    const normalizedSearch = search.toLowerCase();
+    if (!todoTitle.includes(normalizedSearch)) {
+      todo.style.display = 'none';
+    }
+  });
+};
 
 //EVENTOS
 todoForm.addEventListener('submit', (e) => {
@@ -66,6 +91,8 @@ document.addEventListener('click', (e) => {
   }
   if (targetEl.classList.contains('editTodo')) {
     toggleForms();
+    editInput.value = todoTitle;
+    oldInputValue = todoTitle;
   }
 });
 
@@ -73,3 +100,23 @@ cancelEditBtn.addEventListener('click', (e) => {
   e.preventDefault();
   toggleForms();
 });
+
+editForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const editInputValue = editInput.value;
+  if (editInputValue) {
+    updateTodo(editInputValue);
+  }
+  toggleForms();
+});
+
+searchInput.addEventListener('keyup', (e) => {
+  const search = e.target.value;
+  getSearcheTodos(search);
+});
+
+eraseBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    searchInput.value = '';
+    searchInput.dispatchEvent(new Event('keyup'));
+})
