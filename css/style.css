@@ -5,7 +5,9 @@
     color: #333;
     box-sizing: border-box;
 }
-
+html {
+    height: 100vh;
+}
 body {
     background-image: url(../img/background.jpg);
     background-repeat: no-repeat;
